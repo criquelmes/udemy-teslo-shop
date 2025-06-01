@@ -1,10 +1,5 @@
-import Link from "next/link";
+import { PageNotFound } from "@/components";
 
 export default function Page() {
-  return (
-    <div>
-      <h1>404 hot found</h1>
-      <Link href="/">Volver</Link>
-    </div>
-  );
+  return <PageNotFound />;
 }
