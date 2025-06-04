@@ -9,8 +9,10 @@
    - Si estás usando Docker, asegúrate de que las variables de entorno coincidan con las configuraciones de tu contenedor.
    - Si no tienes un archivo `.env`, puedes crear uno manualmente o copiar el ejemplo proporcionado.
 3. Instalar las dependencias con `npm install`
-4. Correr el proyecto con `npm run dev`
-5. Levantar la base de datos `docker compose up -d`
+4. Levantar la base de datos `docker compose up -d`
+5. Correr las migraciones de prisma con `npx prisma migrate dev`
+6. Ejecutar el seed de la base de datos `npm run seed`
+7. Correr el proyecto con `npm run dev`
 
 
 
