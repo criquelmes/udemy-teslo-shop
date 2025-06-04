@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { Title } from "@/components";
 import { initialData } from "@/seed/seed";
 import Image from "next/image";
 import clsx from "clsx";
-import { IoCardOutline, IoCartOutline } from "react-icons/io5";
+import { IoCardOutline } from "react-icons/io5";
 
 const productsInCart = [
   initialData.products[0],
