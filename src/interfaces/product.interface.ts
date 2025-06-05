@@ -1,14 +1,14 @@
 export interface Product {
-  // id: string TODO: falta id
+  id: string;
   description: string;
   images: string[];
   inStock: number;
   price: number;
-  size: Size[];
+  sizes: Size[];
   slug: string;
   tags: string[];
   title: string;
-  type: Type;
+  //todo type: Type;
   gender: Category;
 }
 
