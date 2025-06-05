@@ -10,8 +10,9 @@ interface Props {
 export default async function Home({ searchParams }: Props) {
   const searchParamsProps = await searchParams;
   const page = searchParamsProps?.page ? parseInt(searchParamsProps.page) : 1;
-  const { products, currentPage, totalPages } =
-    await getPaginatedProductsWithImages({ page });
+  const { products, totalPages } = await getPaginatedProductsWithImages({
+    page,
+  });
 
   if (products.length === 0) redirect("/");
 
