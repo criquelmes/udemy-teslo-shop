@@ -4,13 +4,12 @@ import { getProductSlug } from "@/actions";
 import {
   ProductMobileSlideshow,
   ProductSlideshow,
-  QuantitySelector,
-  SizeSelector,
   StockLabel,
 } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { AddToCart } from "./ui/AddToCart";
 
 interface Props {
   params: Promise<{
@@ -45,9 +44,9 @@ export default async function ProductPage({ params }: Props) {
   }
 
   return (
-    <div className="mt-5 mb-20 grid grid-cols-1 lg:grid-cols-4  gap-3">
+    <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3  gap-3">
       {/* Slideshow */}
-      <div className="col-span-1 lg:col-span-3 ">
+      <div className="col-span-1 md:col-span-2 ">
         {/* Mobile Slideshow */}
         <ProductMobileSlideshow
           className="block md:hidden"
@@ -70,19 +69,7 @@ export default async function ProductPage({ params }: Props) {
         </h1>
         <p className="text-lg mb-5">${product.price}</p>
 
-        {/* Selector de tallas */}
-        <SizeSelector
-          selectedSize={product.sizes[0]}
-          availableSizes={product.sizes}
-        />
-
-        {/* Selector de cantidad */}
-        <QuantitySelector quantity={2} />
-
-        {/* Button */}
-        <button className="btn-primary my-5 w-full rounded">
-          Agregar al carrito
-        </button>
+        <AddToCart product={product} />
 
         {/* Descripcion */}
         <h3 className="font-bold text-sm">Descripcion</h3>
