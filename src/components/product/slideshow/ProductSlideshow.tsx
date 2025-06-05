@@ -34,7 +34,6 @@ export const ProductSlideshow = ({ images, title, className }: Props) => {
         navigation={true}
         autoplay={{
           delay: 2500,
-          disableOnInteraction: false,
         }}
         thumbs={{
           swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null,
@@ -63,19 +62,17 @@ export const ProductSlideshow = ({ images, title, className }: Props) => {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper"
       >
-        <SwiperSlide>
-          {images.map((image) => (
-            <SwiperSlide key={image}>
-              <Image
-                className="rounded-lg object-fill"
-                src={`/products/${image}`}
-                alt={title}
-                width={300}
-                height={300}
-              />
-            </SwiperSlide>
-          ))}
-        </SwiperSlide>
+        {images.map((image) => (
+          <SwiperSlide key={image}>
+            <Image
+              className="rounded-lg object-fill"
+              src={`/products/${image}`}
+              alt={title}
+              width={300}
+              height={300}
+            />
+          </SwiperSlide>
+        ))}
       </Swiper>
     </div>
   );
