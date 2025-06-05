@@ -9,12 +9,31 @@ import {
   StockLabel,
 } from "@/components";
 import { titleFont } from "@/config/fonts";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{
     slug: string;
   }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const slug = (await params).slug;
+
+  const product = await getProductSlug(slug);
+
+  return {
+    title: product?.title ?? "Product not found",
+    description:
+      product?.description ?? "No description available for this product.",
+    openGraph: {
+      title: product?.title ?? "Product not found",
+      description:
+        product?.description ?? "No description available for this product.",
+      images: [`/products/${product?.images[1]}`],
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
