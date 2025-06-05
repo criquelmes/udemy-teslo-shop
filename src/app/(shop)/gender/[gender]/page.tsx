@@ -6,19 +6,20 @@ import { Gender } from "@/generated/prisma/client";
 import { redirect } from "next/navigation";
 
 interface Props {
-  params: {
+  params: Promise<{
     gender: string;
-  };
+  }>;
 
-  searchParams?: {
+  searchParams?: Promise<{
     page?: string;
-  };
+  }>;
 }
 
 export default async function CategoryPage({ params, searchParams }: Props) {
   const { gender } = await params;
+  const resolvedSearchParams = await searchParams;
 
-  const page = searchParams?.page ? parseInt(searchParams.page) : 1;
+  const page = parseInt(resolvedSearchParams?.page ?? "1");
   const { products, totalPages } = await getPaginatedProductsWithImages({
     page,
     gender: gender as Gender,
