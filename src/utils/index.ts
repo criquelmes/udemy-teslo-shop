@@ -1,1 +1,1 @@
-export * from "./generate-pagination-numbers";
+export * from "./generate-pagination";
