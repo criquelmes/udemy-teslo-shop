@@ -10,7 +10,7 @@ export async function authenticate(
   formData: FormData
 ) {
   try {
-    console.log(Object.fromEntries(formData.entries()));
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
     await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
