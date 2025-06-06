@@ -9,6 +9,8 @@ interface State {
   // Add methods to manipulate the cart if needed
   addProductToCart: (product: CartProduct) => void;
 
+  updateProductQuantity: (product: CartProduct, quantity: number) => void;
+
   // updaProductInCart
   // removeProductFromCart
 }
@@ -48,6 +50,21 @@ export const useCartStore = create<State>()(
         });
 
         set({ cart: updateProductsInCart });
+      },
+      updateProductQuantity: (product: CartProduct, quantity: number) => {
+        const { cart } = get();
+
+        // 1. Revisar si el producto ya existe en el carrito con la talla seleccionada
+        const updatedCartProducts = cart.map((item) => {
+          if (item.id === product.id && item.size === product.size) {
+            return {
+              ...item,
+              quantity: quantity, // Actualizar la cantidad
+            };
+          }
+          return item;
+        });
+        set({ cart: updatedCartProducts });
       },
     }),
     {

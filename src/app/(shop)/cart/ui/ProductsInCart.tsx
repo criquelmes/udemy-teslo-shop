@@ -9,6 +9,9 @@ import Link from "next/link";
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState(false);
   const productsInCart = useCartStore((state) => state.cart);
+  const updateProductQuantity = useCartStore(
+    (state) => state.updateProductQuantity
+  );
 
   useEffect(() => {
     setLoaded(true);
@@ -41,8 +44,10 @@ export const ProductsInCart = () => {
             </p>
             <p className="font-bold">${product.price}</p>
             <QuantitySelector
-              quantity={3}
-              onQuantitySelected={(value) => console.log(value)}
+              quantity={product.quantity}
+              onQuantitySelected={(quantity) =>
+                updateProductQuantity(product, quantity)
+              }
             />
             <button className="hover:underline cursor-pointer text-xs font-light antialiased mt-3">
               Remove
