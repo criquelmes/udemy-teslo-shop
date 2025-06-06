@@ -5,6 +5,12 @@ import { persist } from "zustand/middleware";
 interface State {
   cart: CartProduct[];
   getTotalItems: () => number;
+  getSummanyInfo: () => {
+    subtotal: number;
+    taxes: number;
+    total: number;
+    itemsInCart: number;
+  };
 
   // Add products to cart
   addProductToCart: (product: CartProduct) => void;
@@ -23,6 +29,26 @@ export const useCartStore = create<State>()(
       getTotalItems: () => {
         const { cart } = get();
         return cart.reduce((total, item) => total + item.quantity, 0);
+      },
+      getSummanyInfo: () => {
+        const { cart } = get();
+        const subtotal = cart.reduce(
+          (subtotal, product) => product.quantity * product.price + subtotal,
+          0
+        );
+        const taxes = subtotal * 0.19; // 19% de impuestos
+        const total = subtotal + taxes;
+        const itemsInCart = cart.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+
+        return {
+          subtotal,
+          taxes,
+          total,
+          itemsInCart,
+        };
       },
       addProductToCart: (product: CartProduct) => {
         const { cart } = get();
