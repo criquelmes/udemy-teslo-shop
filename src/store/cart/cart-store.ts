@@ -6,13 +6,12 @@ interface State {
   cart: CartProduct[];
   getTotalItems: () => number;
 
-  // Add methods to manipulate the cart if needed
+  // Add products to cart
   addProductToCart: (product: CartProduct) => void;
-
+  // Update product quantity in cart
   updateProductQuantity: (product: CartProduct, quantity: number) => void;
-
-  // updaProductInCart
   // removeProductFromCart
+  removeProductFromCart: (product: CartProduct) => void;
 }
 
 export const useCartStore = create<State>()(
@@ -64,6 +63,14 @@ export const useCartStore = create<State>()(
           }
           return item;
         });
+        set({ cart: updatedCartProducts });
+      },
+      removeProductFromCart: (product: CartProduct) => {
+        const { cart } = get();
+        // 1. Filtrar el producto que se quiere eliminar
+        const updatedCartProducts = cart.filter(
+          (item) => !(item.id === product.id && item.size === product.size)
+        );
         set({ cart: updatedCartProducts });
       },
     }),

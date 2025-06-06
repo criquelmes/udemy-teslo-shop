@@ -12,6 +12,9 @@ export const ProductsInCart = () => {
   const updateProductQuantity = useCartStore(
     (state) => state.updateProductQuantity
   );
+  const removeProductFromCart = useCartStore(
+    (state) => state.removeProductFromCart
+  );
 
   useEffect(() => {
     setLoaded(true);
@@ -49,7 +52,10 @@ export const ProductsInCart = () => {
                 updateProductQuantity(product, quantity)
               }
             />
-            <button className="hover:underline cursor-pointer text-xs font-light antialiased mt-3">
+            <button
+              className="hover:underline cursor-pointer text-xs font-light antialiased mt-3"
+              onClick={() => removeProductFromCart(product)}
+            >
               Remove
             </button>
           </div>
