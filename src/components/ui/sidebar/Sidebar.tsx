@@ -24,6 +24,9 @@ export const Sidebar = () => {
 
   const { data: session, status } = useSession();
   const isAuthenticated = !!session?.user;
+  const isAdmin = session?.user?.role === "admin";
+
+  console.log({ isAdmin });
 
   const handleLogout = async () => {
     try {
@@ -134,24 +137,27 @@ export const Sidebar = () => {
             className="w-full bg-gray-50 rounded pl-10 py-1 pr-10 border-b-2 text-xl border-gray-200 focus:outline-none focus:border-blue-500"
           />
         </div>
+        {isAuthenticated && (
+          <>
+            <Link
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+              href="/profile"
+              onClick={() => closeMenu()}
+            >
+              <IoPersonOutline size={20} />
+              <span className="ml-3 text-lg">Perfil</span>
+            </Link>
 
+            <Link
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+              href="/"
+            >
+              <IoTicketOutline size={20} />
+              <span className="ml-3 text-lg">Orders</span>
+            </Link>
+          </>
+        )}
         {/* Menu */}
-        <Link
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          href="/profile"
-          onClick={() => closeMenu()}
-        >
-          <IoPersonOutline size={20} />
-          <span className="ml-3 text-lg">Perfil</span>
-        </Link>
-
-        <Link
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          href="/"
-        >
-          <IoTicketOutline size={20} />
-          <span className="ml-3 text-lg">Orders</span>
-        </Link>
 
         {/* Mostrar logout solo si está autenticado */}
         {isAuthenticated && (
@@ -175,32 +181,36 @@ export const Sidebar = () => {
           </button>
         )}
 
-        {/* Separator */}
-        <div className="w-full h-px bg-gray-200 my-10" />
+        {isAdmin && (
+          <>
+            {/* Separator */}
+            <div className="w-full h-px bg-gray-200 my-10" />
 
-        <Link
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          href="/"
-        >
-          <IoShirtOutline size={20} />
-          <span className="ml-3 text-lg">Products</span>
-        </Link>
+            <Link
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+              href="/"
+            >
+              <IoShirtOutline size={20} />
+              <span className="ml-3 text-lg">Products</span>
+            </Link>
 
-        <Link
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          href="/"
-        >
-          <IoTicketOutline size={20} />
-          <span className="ml-3 text-lg">Orders</span>
-        </Link>
+            <Link
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+              href="/"
+            >
+              <IoTicketOutline size={20} />
+              <span className="ml-3 text-lg">Orders</span>
+            </Link>
 
-        <Link
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          href="/"
-        >
-          <IoPeopleOutline size={20} />
-          <span className="ml-3 text-lg">Users</span>
-        </Link>
+            <Link
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+              href="/"
+            >
+              <IoPeopleOutline size={20} />
+              <span className="ml-3 text-lg">Users</span>
+            </Link>
+          </>
+        )}
       </nav>
     </div>
   );
