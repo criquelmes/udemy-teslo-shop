@@ -3,13 +3,22 @@
 import { authenticate } from "@/actions";
 import clsx from "clsx";
 import Link from "next/link";
-import { useActionState } from "react";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 import { IoInformationOutline } from "react-icons/io5";
 
 export const LoginForm = () => {
   const [state, dispatch] = useActionState(authenticate, undefined);
-  console.log("Form state:", state);
+  const router = useRouter();
+
+  useEffect(() => {
+    // Reset the state when the component mounts
+    if (state === "Login successful") {
+      router.replace("/");
+    }
+  }, [state, router]);
+  console.log({ state });
   return (
     <>
       <form action={dispatch} className="flex flex-col">
@@ -32,7 +41,8 @@ export const LoginForm = () => {
           aria-live="polite"
           aria-atomic="true"
         >
-          {state === "Invalid credentials." && (
+          {(state === "Invalid credentials" ||
+            state === "CredentialsSignin") && (
             <div className="flex flex-row mt-2">
               <IoInformationOutline className="h-5 w-5 text-red-500" />
               <p className="text-sm text-red-500">{state}</p>

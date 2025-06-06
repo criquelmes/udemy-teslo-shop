@@ -8,9 +8,8 @@ export default async function AuthLayout({
 }) {
   const session = await auth();
   if (session?.user) {
-    redirect("/"); // Redirect to home if user is authenticated
+    redirect("/");
   }
-  console.log("Session in AuthLayout:", session);
   return (
     <div>
       <main className="flex justify-center">

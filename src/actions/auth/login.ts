@@ -11,16 +11,16 @@ export async function authenticate(
 ) {
   try {
     // await new Promise((resolve) => setTimeout(resolve, 2000));
-    await signIn("credentials", formData);
+    await signIn("credentials", {
+      ...Object.fromEntries(formData.entries()),
+      redirect: false,
+    });
+    return "Login successful";
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
+    console.log(error);
+    if (error instanceof AuthError && error.type === "CredentialsSignin") {
+      return "CredentialsSignin";
     }
-    throw error;
   }
+  return "Invalid credentials";
 }
