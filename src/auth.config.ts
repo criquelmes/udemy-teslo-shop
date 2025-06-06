@@ -17,6 +17,7 @@ export const authConfig: NextAuthConfig = {
         if (!parsedCredentials.success) return null;
 
         const { email, password } = parsedCredentials.data;
+        console.log("authconfig.ts: authorize called with credentials");
         console.log("Email:", email, "Password:", password);
 
         // Validate credentials
