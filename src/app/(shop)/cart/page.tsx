@@ -27,7 +27,7 @@ export default function CartPage() {
             </div>
             <div>
               <Link
-                href="/checkout"
+                href="/checkout/address"
                 className="bg-black text-white px-5 py-2 rounded mt-5 block text-center"
               >
                 Checkout

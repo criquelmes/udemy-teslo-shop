@@ -84,3 +84,8 @@ model User {
 
   @@index([email])
 }
+
+model Country {
+  id   String @id
+  name String
+}
