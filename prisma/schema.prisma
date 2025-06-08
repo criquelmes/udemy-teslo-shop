@@ -72,6 +72,7 @@ model ProductImage {
 model User {
   id            String   @id @default(uuid())
   name          String
+  lastName      String
   email         String   @unique
   emailVerified Boolean? @default(false)
   password      String
