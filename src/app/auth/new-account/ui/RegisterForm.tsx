@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import clsx from "clsx";
-import { registerUser } from "@/actions";
+import { login, registerUser } from "@/actions";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type FormInputs = {
@@ -23,13 +23,15 @@ export const RegisterForm = () => {
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     const { name, lastName, email, password } = data;
     const response = await registerUser(name, lastName, email, password);
+
     if (!response.ok) {
       setErrorMessage(response.message);
       console.error(response.message);
       return;
     }
 
-    console.log("User registered successfully:", response);
+    await login(email.toLowerCase(), password);
+    window.location.replace("/");
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">

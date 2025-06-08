@@ -35,3 +35,20 @@ export async function authenticate(
 
   return "Invalid credentials";
 }
+
+export const login = async (email: string, password: string) => {
+  try {
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    return "Login successful";
+  } catch (error) {
+    console.error("Login error:", error);
+    return {
+      ok: false,
+      message: "Unable to log in",
+    };
+  }
+};
