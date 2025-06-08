@@ -1,11 +1,13 @@
 "use client";
 
-import type { Country } from "@/interfaces";
-import clsx from "clsx";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import type { Country } from "@/interfaces";
+import { useAddressStore } from "@/store";
+import clsx from "clsx";
 
 type FormInputs = {
-  firstname: string;
+  firstName: string;
   lastName: string;
   address: string;
   address2?: string;
@@ -25,14 +27,24 @@ export const AddressForm = ({ countries }: Props) => {
     handleSubmit,
     register,
     formState: { isValid },
+    reset,
   } = useForm<FormInputs>({
     defaultValues: {
       //TODO: Leer de la bd
     },
   });
 
+  const setAddress = useAddressStore((state) => state.setAddress);
+  const address = useAddressStore((state) => state.address);
+
+  useEffect(() => {
+    if (address.firstName) {
+      reset(address);
+    }
+  }, [address, reset]);
+
   const onSubmit = (data: FormInputs) => {
-    console.log("Form submitted:", data);
+    setAddress(data);
   };
   return (
     <form
@@ -44,7 +56,7 @@ export const AddressForm = ({ countries }: Props) => {
         <input
           type="text"
           className="p-2 border rounded-md bg-gray-200"
-          {...register("firstname", { required: true })}
+          {...register("firstName", { required: true })}
         />
       </div>
 
