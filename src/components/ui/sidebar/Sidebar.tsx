@@ -26,7 +26,7 @@ export const Sidebar = () => {
   const isAuthenticated = !!session?.user;
   const isAdmin = session?.user?.role === "admin";
 
-  console.log({ isAdmin });
+  // console.log({ isAdmin });
 
   const handleLogout = async () => {
     try {
