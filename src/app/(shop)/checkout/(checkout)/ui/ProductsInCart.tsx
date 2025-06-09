@@ -13,6 +13,7 @@ export const ProductsInCart = () => {
     setLoaded(true);
   }, []);
   if (!loaded) return <p>Loading...</p>;
+
   return (
     <>
       {productsInCart.map((product) => (

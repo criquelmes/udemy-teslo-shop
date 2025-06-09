@@ -5,11 +5,14 @@ import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 export const PlaceOrder = () => {
+  const router = useRouter();
   const [loaded, setLoaded] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const address = useAddressStore((state) => state.address);
@@ -19,13 +22,23 @@ export const PlaceOrder = () => {
   );
 
   const cart = useCartStore((state) => state.cart);
+  const clearCart = useCartStore((state) => state.clearCart);
 
   useEffect(() => {
     setLoaded(true);
   }, []);
 
+  // Validar si el carrito está vacío
+  const isCartEmpty = cart.length === 0;
+
   const onPlaceOrder = async () => {
+    // Validación adicional antes de procesar
+    if (isCartEmpty) {
+      setErrorMessage("No hay productos en el carrito");
+      return;
+    }
     setIsPlacingOrder(true);
+    setErrorMessage(""); // Limpiar errores previos
 
     const productsToOrder = cart.map((item) => ({
       productId: item.id,
@@ -36,12 +49,20 @@ export const PlaceOrder = () => {
     // Simulate an API call to place the order
     // await new Promise((resolve) => setTimeout(resolve, 2000));
 
-    console.log(address, productsToOrder);
-    //TODO: Implement Server Action
+    // Server Action
     const response = await placeOrder(productsToOrder, address);
-    console.log({ response });
-
-    setIsPlacingOrder(false);
+    if (!response.ok) {
+      // Handle error
+      console.error("Failed to place order:", response.message);
+      setIsPlacingOrder(false);
+      setErrorMessage(
+        response.error || "An error occurred while placing the order."
+      );
+      return;
+    }
+    //* todo salio bien
+    clearCart();
+    router.replace("/orders/" + response.order?.id);
   };
 
   if (!loaded) {
@@ -95,18 +116,26 @@ export const PlaceOrder = () => {
           </Link>
           .
         </p>
-        {/* <p className="text-red-500">Failed to place order</p> */}
+        {/* Mostrar mensaje de error si el carrito está vacío */}
+        {isCartEmpty && (
+          <p className="text-red-500 mb-3">
+            No hay productos en el carrito para procesar la orden.
+          </p>
+        )}
+
+        <p className="text-red-500">{errorMessage}</p>
+
         <button
-          //   href="/orders/123"
           onClick={onPlaceOrder}
+          disabled={isPlacingOrder || isCartEmpty}
           className={clsx({
-            "bg-black w-full text-white px-5 py-2 rounded mt-5 block text-center cursor-pointer ":
-              !isPlacingOrder,
+            "bg-black w-full text-white px-5 py-2 rounded mt-5 block text-center cursor-pointer":
+              !isPlacingOrder && !isCartEmpty,
             "bg-gray-400 w-full text-white px-5 py-2 rounded mt-5 block text-center cursor-not-allowed":
-              isPlacingOrder,
+              isPlacingOrder || isCartEmpty,
           })}
         >
-          Place order
+          {isCartEmpty ? "Carrito vacío" : "Place order"}
         </button>
       </div>
     </div>
