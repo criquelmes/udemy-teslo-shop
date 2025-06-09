@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import type { Country } from "@/interfaces";
+import type { Address, Country } from "@/interfaces";
 import { useAddressStore } from "@/store";
 import clsx from "clsx";
 import { setUserAddress, deleteUserAddress } from "@/actions";
@@ -22,9 +22,10 @@ type FormInputs = {
 
 interface Props {
   countries: Country[];
+  userStoredAddress?: Partial<Address>;
 }
 
-export const AddressForm = ({ countries }: Props) => {
+export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
   const {
     handleSubmit,
     register,
@@ -32,7 +33,8 @@ export const AddressForm = ({ countries }: Props) => {
     reset,
   } = useForm<FormInputs>({
     defaultValues: {
-      //TODO: Leer de la bd
+      ...(userStoredAddress as Partial<FormInputs>),
+      saveAddress: false,
     },
   });
 
