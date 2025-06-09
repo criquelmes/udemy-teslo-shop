@@ -7,6 +7,7 @@ import { useAddressStore } from "@/store";
 import clsx from "clsx";
 import { setUserAddress, deleteUserAddress } from "@/actions";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 type FormInputs = {
   firstName: string;
@@ -26,6 +27,7 @@ interface Props {
 }
 
 export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
+  const router = useRouter();
   const {
     handleSubmit,
     register,
@@ -51,16 +53,18 @@ export const AddressForm = ({ countries, userStoredAddress = {} }: Props) => {
     }
   }, [address, reset]);
 
-  const onSubmit = (data: FormInputs) => {
+  const onSubmit = async (data: FormInputs) => {
     setAddress(data);
 
     const { saveAddress, ...rest } = data;
 
     if (saveAddress) {
-      setUserAddress(rest, session!.user.id);
+      await setUserAddress(rest, session!.user.id);
     } else {
-      deleteUserAddress(session!.user.id);
+      await deleteUserAddress(session!.user.id);
     }
+
+    router.push("/checkout");
   };
   return (
     <form
