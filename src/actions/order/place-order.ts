@@ -3,6 +3,7 @@
 import { auth } from "@/auth.config";
 import type { Address, Size } from "@/interfaces";
 import prisma from "@/lib/prisma";
+import { size } from "zod/v4";
 
 interface ProductToOrder {
   productId: string;
@@ -59,11 +60,40 @@ export const placeOrder = async (
   const prismaTx = await prisma.$transaction(async (tx) => {
     //1. Actualizar el stock de los productos
     //2. Crear la orden - Encabezado - Detalles
+    const order = await tx.order.create({
+      data: {
+        userId: userId,
+        itemsInOrder: itemsInOrder,
+        subtotal: subTotal,
+        tax: tax,
+        total: total,
+
+        OrderItem: {
+          createMany: {
+            data: productsIds.map((p) => ({
+              quantity: p.quantity,
+              size: p.size,
+              productId: p.productId,
+              price:
+                products.find((product) => product.id === p.productId)?.price ||
+                0,
+            })),
+          },
+        },
+      },
+    });
+    // validar si price es 0 entonces lanzar un error
     //3. Crear la direccion de envio
+
+    return {
+      order,
+      updatedProducts: [],
+      orderAddress: {},
+    };
   });
 
-  return {
-    ok: true,
-    message: "Order placed successfully",
-  };
+  // return {
+  //   ok: true,
+  //   message: "Order placed successfully",
+  // };
 };
