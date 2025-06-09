@@ -22,7 +22,7 @@ export const OrderSummary = () => {
 
   if (!loaded) return <p>Loading...</p>;
   return (
-    <>
+    <div className="grid grid-cols-2">
       <span>No. Products</span>
       <span className="text-right">
         {itemsInCart === 1 ? "1 item" : `${itemsInCart} items`}
@@ -36,6 +36,6 @@ export const OrderSummary = () => {
 
       <span className="text-2xl mt-5">Total</span>
       <span className="text-right text-2xl mt-5">{currencyFormat(total)}</span>
-    </>
+    </div>
   );
 };
