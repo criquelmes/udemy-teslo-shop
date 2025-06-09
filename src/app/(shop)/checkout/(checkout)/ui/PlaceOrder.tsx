@@ -1,5 +1,6 @@
 "use client";
 
+import { placeOrder } from "@/actions";
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
@@ -27,7 +28,7 @@ export const PlaceOrder = () => {
     setIsPlacingOrder(true);
 
     const productsToOrder = cart.map((item) => ({
-      id: item.id,
+      productId: item.id,
       quantity: item.quantity,
       size: item.size,
     }));
@@ -37,6 +38,8 @@ export const PlaceOrder = () => {
 
     console.log(address, productsToOrder);
     //TODO: Implement Server Action
+    const response = await placeOrder(productsToOrder, address);
+    console.log({ response });
 
     setIsPlacingOrder(false);
   };
