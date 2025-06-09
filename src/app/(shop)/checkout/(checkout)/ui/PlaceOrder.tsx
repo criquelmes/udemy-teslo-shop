@@ -2,12 +2,14 @@
 
 import { useAddressStore, useCartStore } from "@/store";
 import { currencyFormat } from "@/utils";
+import clsx from "clsx";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/shallow";
 
 export const PlaceOrder = () => {
   const [loaded, setLoaded] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   const address = useAddressStore((state) => state.address);
 
@@ -15,9 +17,29 @@ export const PlaceOrder = () => {
     useShallow((state) => state.getSummanyInfo())
   );
 
+  const cart = useCartStore((state) => state.cart);
+
   useEffect(() => {
     setLoaded(true);
   }, []);
+
+  const onPlaceOrder = async () => {
+    setIsPlacingOrder(true);
+
+    const productsToOrder = cart.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+      size: item.size,
+    }));
+
+    // Simulate an API call to place the order
+    // await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    console.log(address, productsToOrder);
+    //TODO: Implement Server Action
+
+    setIsPlacingOrder(false);
+  };
 
   if (!loaded) {
     return (
@@ -70,9 +92,16 @@ export const PlaceOrder = () => {
           </Link>
           .
         </p>
+        {/* <p className="text-red-500">Failed to place order</p> */}
         <button
           //   href="/orders/123"
-          className="bg-black w-full text-white px-5 py-2 rounded mt-5 block text-center"
+          onClick={onPlaceOrder}
+          className={clsx({
+            "bg-black w-full text-white px-5 py-2 rounded mt-5 block text-center cursor-pointer ":
+              !isPlacingOrder,
+            "bg-gray-400 w-full text-white px-5 py-2 rounded mt-5 block text-center cursor-not-allowed":
+              isPlacingOrder,
+          })}
         >
           Place order
         </button>
