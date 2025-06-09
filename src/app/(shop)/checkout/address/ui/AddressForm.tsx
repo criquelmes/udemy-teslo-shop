@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import type { Country } from "@/interfaces";
 import { useAddressStore } from "@/store";
 import clsx from "clsx";
+import { setUserAddress } from "@/actions";
+import { useSession } from "next-auth/react";
 
 type FormInputs = {
   firstName: string;
@@ -34,6 +36,10 @@ export const AddressForm = ({ countries }: Props) => {
     },
   });
 
+  const { data: session } = useSession({
+    required: true,
+  });
+
   const setAddress = useAddressStore((state) => state.setAddress);
   const address = useAddressStore((state) => state.address);
 
@@ -45,6 +51,17 @@ export const AddressForm = ({ countries }: Props) => {
 
   const onSubmit = (data: FormInputs) => {
     setAddress(data);
+
+    const { saveAddress, ...rest } = data;
+    if (saveAddress) {
+      if (session?.user.id) {
+        setUserAddress(rest, session.user.id);
+      } else {
+        // Optionally handle the missing user id case here
+        return;
+      }
+    } else {
+    }
   };
   return (
     <form
