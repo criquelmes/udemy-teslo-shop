@@ -54,4 +54,16 @@ export const placeOrder = async (
     },
     { subTotal: 0, tax: 0, total: 0 }
   );
+
+  // Crear la transaccion de la orden
+  const prismaTx = await prisma.$transaction(async (tx) => {
+    //1. Actualizar el stock de los productos
+    //2. Crear la orden - Encabezado - Detalles
+    //3. Crear la direccion de envio
+  });
+
+  return {
+    ok: true,
+    message: "Order placed successfully",
+  };
 };
