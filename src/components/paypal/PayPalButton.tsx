@@ -37,7 +37,7 @@ export const PayPalButton = ({ orderId, amount }: Props) => {
       purchase_units: [
         {
           // reference_id: 'order_id,
-          // invoice_id: order_id
+          invoice_id: orderId,
           amount: {
             value: roundedAmount, // Use the amount you want to charge
             currency_code: "USD",
